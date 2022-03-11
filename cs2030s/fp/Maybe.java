@@ -38,6 +38,12 @@ public abstract class Maybe<T> {
         Transformer<? super Object, ? extends U> transformer) {
       return this.none();
     }
+
+    @Override
+    public <U> Maybe<U> flatMap(Transformer<? super Object, 
+        ? extends Maybe<? extends U>> transformer) {
+      return this.none();
+    }
   }
 
   private static class Some<T> extends Maybe<T> {
@@ -81,6 +87,15 @@ public abstract class Maybe<T> {
     public <U> Maybe<U> map(Transformer<? super T, ? extends U> transformer) {
       return new Some<U>(transformer.transform(this.value));
     }
+
+    @Override
+    public <U> Maybe<U> flatMap(Transformer<? super T, 
+        ? extends Maybe<? extends U>> transformer) {
+      Maybe<? extends U> transformed = transformer.transform(this.value);
+      return transformed == this.none()
+          ? this.none()
+          : new Some<U>(transformed.get());
+    }
   }
 
   public static <T> Maybe<T> none() {
@@ -105,4 +120,7 @@ public abstract class Maybe<T> {
 
   public abstract <U> Maybe<U> map(
       Transformer<? super T, ? extends U> transformer);
+
+  public abstract <U> Maybe<U> flatMap(Transformer<? super T,
+      ? extends Maybe<? extends U>> transformer);
 }
