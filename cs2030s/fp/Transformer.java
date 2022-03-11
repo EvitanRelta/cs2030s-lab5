@@ -1,6 +1,13 @@
 /**
- * CS2030S Lab 5
+ * The Transformer interface that can transform a type T
+ * to type U.
+ * CS2030S Lab 4
  * AY21/22 Semester 2
  *
- * @author Put Your Name (Lab Group)
+ * @author Tan Zong Zhi, Shaun (Group 16A)
  */
+
+public interface Transformer<T, U> {
+  U transform(T input);
+}
+
