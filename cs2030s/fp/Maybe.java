@@ -4,7 +4,9 @@
  *
  * @author Tan Zong Zhi, Shaun (Group 16A)
  */
+
 package cs2030s.fp;
+
 import java.util.NoSuchElementException;
 
 public abstract class Maybe<T> {
