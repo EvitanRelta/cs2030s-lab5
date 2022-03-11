@@ -6,6 +6,7 @@
  *
  * @author Tan Zong Zhi, Shaun (Group 16A)
  */
+package cs2030s.fp;
 
 public interface Transformer<T, U> {
   U transform(T input);
