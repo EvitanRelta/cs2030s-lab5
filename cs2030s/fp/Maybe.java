@@ -44,6 +44,16 @@ public abstract class Maybe<T> {
         ? extends Maybe<? extends U>> transformer) {
       return this.none();
     }
+
+    @Override
+    public Object orElse(Object elseValue) {
+      return elseValue;
+    }
+
+    @Override
+    public Object orElseGet(Producer<? extends Object> producer) {
+      return producer.produce();
+    }
   }
 
   private static class Some<T> extends Maybe<T> {
@@ -96,6 +106,16 @@ public abstract class Maybe<T> {
           ? this.none()
           : new Some<>(transformed.get());
     }
+
+    @Override
+    public T orElse(T elseValue) {
+      return this.get();
+    }
+
+    @Override
+    public T orElseGet(Producer<? extends T> producer) {
+      return this.get();
+    }
   }
 
   public static <T> Maybe<T> none() {
@@ -123,4 +143,8 @@ public abstract class Maybe<T> {
 
   public abstract <U> Maybe<U> flatMap(Transformer<? super T,
       ? extends Maybe<? extends U>> transformer);
+
+  public abstract T orElse(T elseValue);
+
+  public abstract T orElseGet(Producer<? extends T> producer);
 }
