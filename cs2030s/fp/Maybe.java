@@ -85,7 +85,7 @@ public abstract class Maybe<T> {
 
     @Override
     public <U> Maybe<U> map(Transformer<? super T, ? extends U> transformer) {
-      return new Some<U>(transformer.transform(this.value));
+      return new Some<>(transformer.transform(this.value));
     }
 
     @Override
@@ -94,7 +94,7 @@ public abstract class Maybe<T> {
       Maybe<? extends U> transformed = transformer.transform(this.value);
       return transformed == this.none()
           ? this.none()
-          : new Some<U>(transformed.get());
+          : new Some<>(transformed.get());
     }
   }
 
