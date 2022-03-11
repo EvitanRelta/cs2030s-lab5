@@ -25,6 +25,17 @@ public abstract class Maybe<T> {
     protected Object get() throws NoSuchElementException {
       throw new NoSuchElementException();
     }
+
+    @Override
+    public Maybe<Object> filter(BooleanCondition<? super Object> predicate) {
+      return this.none();
+    }
+
+    @Override
+    public <U> Maybe<U> map(
+        Transformer<? super Object, ? extends U> transformer) {
+      return this.none();
+    }
   }
 
   private static class Some<T> extends Maybe<T> {
@@ -56,6 +67,18 @@ public abstract class Maybe<T> {
     protected T get() {
       return this.value;
     }
+
+    @Override
+    public Maybe<T> filter(BooleanCondition<? super T> predicate) {
+      return this.value != null && !predicate.test(this.value)
+          ? this.none()
+          : this;
+    }
+
+    @Override
+    public <U> Maybe<U> map(Transformer<? super T, ? extends U> transformer) {
+      return new Some<U>(transformer.transform(this.value));
+    }
   }
 
   public static <T> Maybe<T> none() {
@@ -75,4 +98,9 @@ public abstract class Maybe<T> {
   }
 
   protected abstract T get();
+
+  public abstract Maybe<T> filter(BooleanCondition<? super T> predicate);
+
+  public abstract <U> Maybe<U> map(
+      Transformer<? super T, ? extends U> transformer);
 }
