@@ -30,19 +30,19 @@ public abstract class Maybe<T> {
 
     @Override
     public Maybe<Object> filter(BooleanCondition<? super Object> predicate) {
-      return this.none();
+      return Maybe.none();
     }
 
     @Override
     public <U> Maybe<U> map(
         Transformer<? super Object, ? extends U> transformer) {
-      return this.none();
+      return Maybe.none();
     }
 
     @Override
     public <U> Maybe<U> flatMap(Transformer<? super Object, 
         ? extends Maybe<? extends U>> transformer) {
-      return this.none();
+      return Maybe.none();
     }
 
     @Override
@@ -89,7 +89,7 @@ public abstract class Maybe<T> {
     @Override
     public Maybe<T> filter(BooleanCondition<? super T> predicate) {
       return this.value != null && !predicate.test(this.value)
-          ? this.none()
+          ? Maybe.none()
           : this;
     }
 
@@ -102,8 +102,8 @@ public abstract class Maybe<T> {
     public <U> Maybe<U> flatMap(Transformer<? super T, 
         ? extends Maybe<? extends U>> transformer) {
       Maybe<? extends U> transformed = transformer.transform(this.value);
-      return transformed == this.none()
-          ? this.none()
+      return transformed == Maybe.none()
+          ? Maybe.none()
           : new Some<>(transformed.get());
     }
 
