@@ -3,36 +3,30 @@ import cs2030s.fp.Transformer;
 import java.util.Map;
 
 class Lab5 {
-  public static String getGrade(String student, String module, String assessment,
-      Map<String, Map<String, Map<String, String>>> db) {
-    Map<String, Map<String, String>> std = db.get(student);
-    if (std == null) {
-      return "No such entry";
-    } else {
-      Map<String, String> mod = std.get(module);
-      if (mod == null) {
-        return "No such entry";
-      } else {
-        String grade = mod.get(assessment);
-        if (grade == null) {
-          return "No such entry";
-        }
-        return grade;
+  public static String getGrade(String student, String module, 
+      String assessment, Map<String, Map<String, Map<String, String>>> map) {
+
+    Transformer<Map<String, Map<String, String>>, Maybe<Map<String, String>>> 
+        getModule = new Transformer<>() {
+          @Override
+          public Maybe<Map<String, String>> transform(Map<String, 
+              Map<String, String>> input) {
+            return Maybe.of(input.get(module));
+          }
+        };
+
+    Transformer<Map<String, String>, Maybe<String>> getAssessment = new Transformer<>() {
+      @Override
+      public Maybe<String> transform(Map<String, String> input) {
+        return Maybe.of(input.get(assessment));
       }
-    }
+    };
+
+    return Maybe.of(map.get(student))
+        .flatMap(getModule)
+        .flatMap(getAssessment)
+        .orElse("No such entry");
   }
-
-  /*
-  public static String getGrade(String student, String module, String assessment,
-      Map<String, Map<String, Map<String, String>>> map) {
-
-    Transformer<Map<String, Map<String, String>>, Maybe<Map<String, String>>> getModule = ..
-
-    Transformer<Map<String, String>, Maybe<String>> getAssessment = ..
-
-    return Maybe...;
-  }
-  */
 
   public static void main(String[] args) {
     Map<String, Map<String, Map<String, String>>> students =
